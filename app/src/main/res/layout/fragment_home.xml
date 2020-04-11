@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+    <import type="android.view.View"/>
+        <variable
+            name="handler"
+            type="com.example.stayathome.ui.home.HomeViewModel" />
+        <variable
+            name="hasRecords"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment"
+        android:padding="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/create_request"
+                android:layout_marginTop="4dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/request_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="@{hasRecords?View.VISIBLE:View.INVISIBLE}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+           <include
+               android:id="@+id/no_records"
+               layout="@layout/no_records"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_above="@+id/create_request"
+               android:visibility="@{hasRecords?View.INVISIBLE:View.VISIBLE}"/>
+            <Button
+                android:id="@+id/create_request"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/button_background"
+                android:onClick="@{() -> handler.clickOnCreateRequest()}"
+                android:text="@string/create_request"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"/>
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="handler"
+            type="com.example.stayathome.ui.request.RequestViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp"
+            tools:context=".ui.request.RequestActivity">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/your_nearest_police_station"
+                android:textColor="@color/background_dark" />
+
+            <TextView
+                android:id="@+id/ps_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="6dp"
+
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/your_pin_code"
+                android:textColor="@color/background_dark" />
+
+            <TextView
+                android:id="@+id/pin_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="6dp"
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/reason"
+                android:textColor="@color/background_dark" />
+
+            <EditText
+                android:id="@+id/reason_et"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/bordered_edittext"
+                android:gravity="start"
+                android:hint="@string/please_let_us_know_about_your_reason_to_go_out"
+                android:inputType="textMultiLine"
+                android:padding="6dp"
+                android:textColor="@color/background_dark"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/fill_start_and_end_time_recommended_1hr"
+                android:textColor="@color/background_dark" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="4dp"
+                    android:layout_toLeftOf="@+id/to_tv"
+                    android:background="@drawable/background_edittext"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/startTimeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_toRightOf="@+id/start_img"
+                        android:gravity="center"
+                        android:padding="6dp"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:id="@+id/start_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_access_time" />
+
+                </RelativeLayout>
+                <TextView
+                    android:id="@+id/to_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center"
+                    android:padding="6dp"
+                    android:text="to"
+                    android:textColor="@color/background_dark"
+                    android:textSize="16sp" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_toRightOf="@+id/to_tv"
+                    android:background="@drawable/background_edittext"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/endTimeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_toRightOf="@+id/end_img"
+                        android:gravity="center"
+                        android:padding="6dp"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:id="@+id/end_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_access_time" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/date"
+                android:textColor="@color/background_dark" />
+
+            <EditText
+                android:id="@+id/date_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/background_edittext"
+                android:drawableLeft="@drawable/ic_date"
+                android:drawablePadding="20dp"
+                android:focusable="false"
+                android:hint="@string/mm_dd_yyyy"
+                android:inputType="date"
+                android:onClick="@{() -> handler.clickOnDate()}"
+                android:padding="6dp"
+                android:textColor="@color/background_dark"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/any_attachment_optional"
+                android:textColor="@color/background_dark" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:onClick="@{() -> handler.clickOnAttach()}"
+                android:src="@drawable/ic_add"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/attach_file_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@color/background"
+                android:drawableRight="@drawable/ic_close"
+                android:onClick="@{() -> handler.clickOnClose()}"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/button_background"
+                android:onClick="@{() -> handler.clickOnSubmit()}"
+                android:text="@string/submit_request"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </ScrollView>
+</layout>

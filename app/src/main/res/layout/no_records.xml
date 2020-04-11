@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_coronavirus"
+            android:layout_centerInParent="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/image"
+            android:layout_centerHorizontal="true"
+            android:text="@string/no_request_yet"
+            android:textColor="@color/background_dark"
+            android:textSize="18sp"
+            android:padding="8dp"
+            android:layout_margin="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image"
+            android:layout_centerHorizontal="true"
+            android:text="@string/request"
+            android:textColor="@color/background_dark"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:padding="8dp"
+            android:layout_margin="8dp"/>
+
+
+    </RelativeLayout>
+</layout>
