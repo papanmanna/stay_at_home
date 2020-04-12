@@ -1,6 +1,8 @@
 package com.example.stayathome.ui.home;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,10 +13,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.stayathome.R;
 import com.example.stayathome.auth.LoginActivity;
 import com.example.stayathome.databinding.FragmentHomeBinding;
 import com.example.stayathome.models.GetRequestResponse;
@@ -37,6 +41,7 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment implements HomeViewModel {
 
 
+    private static final int CREATE_REQUEST = 1111;
     private FragmentHomeBinding fragmentHomeBinding;
     private RequestListAdapter adapter;
     private ViewDialog viewDialog;
@@ -115,9 +120,19 @@ public class HomeFragment extends Fragment implements HomeViewModel {
     public void clickOnCreateRequest() {
         String id = UserManager.getInstance().getUserPoliceStationId();
         if (id != null && !TextUtils.isEmpty(id))
-            startActivity(new Intent(requireActivity(), RequestActivity.class));
+            startActivityForResult(new Intent(requireActivity(), RequestActivity.class), CREATE_REQUEST);
         else {
-            //TODO:Alert
+            final AlertDialog alertDialog = new AlertDialog.Builder(requireContext()).create();
+            alertDialog.setTitle(getString(R.string.atert));
+            alertDialog.setMessage(getString(R.string.alert_body));
+            alertDialog.setCancelable(false);
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.show();
         }
     }
 
@@ -151,5 +166,13 @@ public class HomeFragment extends Fragment implements HomeViewModel {
     public void onError(String error) {
         viewDialog.hideDialog();
         fragmentHomeBinding.swipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CREATE_REQUEST && resultCode == Activity.RESULT_OK){
+            presenter.getAllRequest();
+        }
     }
 }

@@ -34,7 +34,7 @@ import retrofit2.Response;
 public class OtpFragment extends Fragment implements VerificationListener, OtpViewModel {
 
     private FragmentOtpBinding mBinding;
-    private String userName, mobile, email, aadhaarId, password, pinCode;
+    private String firstName, lastName, mobile, email, aadhaarId, password, pinCode;
     private OtpPresenter mPresenter;
     private ViewDialog viewDialog;
 
@@ -50,7 +50,8 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
         mBinding = FragmentOtpBinding.inflate(inflater, container, false);
         mBinding.setClickHandler(this);
         if (getArguments() != null) {
-            userName = getArguments().getString("name");
+            firstName = getArguments().getString("firstName");
+            lastName = getArguments().getString("lastName");
             email = getArguments().getString("email");
             mobile = getArguments().getString("mobile");
             aadhaarId = getArguments().getString("aadhaar");
@@ -105,9 +106,9 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
                 } else if (responseCode == SendOTPResponseCode.SMS_SUCCESSFUL_SEND_TO_NUMBER || responseCode == SendOTPResponseCode.DIRECT_VERIFICATION_FAILED_SMS_SUCCESSFUL_SEND_TO_NUMBER) {
                     // Otp send to number successfully
                     Toast.makeText(requireContext(), getString(R.string.successfull_send_otp), Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (responseCode == SendOTPResponseCode.SERVER_ERROR_OTP_NOT_VERIFIED) {
                     //exception found
-//                    Toast.makeText(requireContext(), getString(R.string.error) + ": " + responseCode.code, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.otp_not_verified), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -115,7 +116,7 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
 
     private void signUp() {
         viewDialog.showDialog();
-        mPresenter.signUp(userName, email, mobile, aadhaarId, pinCode, password);
+        mPresenter.signUp(firstName, lastName, email, mobile, aadhaarId, pinCode, password);
     }
 
     @Override

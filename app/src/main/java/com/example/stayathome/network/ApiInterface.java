@@ -26,7 +26,7 @@ public interface ApiInterface {
     @Headers("Content-Type:application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST("v1/users/signup")
-    Observable<Response<RegistrationResponse>> signUp(@Field("userName") String userName, @Field("email") String email, @Field("password") String password,
+    Observable<Response<RegistrationResponse>> signUp(@Field("firstName") String firstName, @Field("lastName") String lastName, @Field("email") String email, @Field("password") String password,
                                                       @Field("phone") String phone, @Field("aadharNumber") String aadhaarNo, @Field("pinCode") String pinCode);
 
     @Headers("Content-Type:application/x-www-form-urlencoded")

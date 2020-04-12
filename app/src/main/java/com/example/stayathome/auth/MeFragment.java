@@ -58,7 +58,7 @@ public class MeFragment extends Fragment {
                         mViewDialog.hideDialog();
                         if (meResponseResponse.isSuccessful() && meResponseResponse.body() != null && meResponseResponse.body().isStatus()) {
                             MeResponse.Result user = meResponseResponse.body().getResult();
-                            UserManager.getInstance().updateUserData(user.getName(), user.getAadhaarId(), user.getPinCode(), user.getStation(), user.getEmail(), user.getPhone());
+                            UserManager.getInstance().updateUserData(user.getFirstName(), user.getLastName(), user.getAadhaarId(), user.getPinCode(), user.getStation(), user.getEmail(), user.getPhone());
                             Intent intentMain = new Intent(requireActivity(), MainActivity.class);
                             intentMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             intentMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         NavHeaderMainBinding headerMainBinding = NavHeaderMainBinding.bind(mainBinding.navView.getHeaderView(0));
-        headerMainBinding.nameTv.setText(UserManager.getInstance().getUserName());
+        headerMainBinding.nameTv.setText(UserManager.getInstance().getUserFname() + " " + UserManager.getInstance().getUserLname());
         headerMainBinding.emailTv.setText(UserManager.getInstance().getUserEmail());
         headerMainBinding.mobTv.setText(UserManager.getInstance().getUserPhone());
 

@@ -6,4 +6,5 @@
     <dimen name="nav_header_height">126dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="header">180dp</dimen>
+    <dimen name="editText_height">48dp</dimen>
 </resources>

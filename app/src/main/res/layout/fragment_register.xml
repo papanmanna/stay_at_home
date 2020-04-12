@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="clickHandler"
             type="com.example.stayathome.ui.registration.RegisterViewModel" />
     </data>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -15,8 +17,8 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="@dimen/header"
-            android:background="@drawable/curve_backgrund"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:background="@drawable/curve_backgrund">
 
             <ImageView
                 android:layout_width="64dp"
@@ -36,134 +38,154 @@
                 android:text="@string/register"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/white"
-                android:visibility="visible"/>
+                android:visibility="visible" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/header">
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/header"
+            android:scrollbars="none">
 
-            <LinearLayout
-                android:id="@+id/input_layout"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/name_et"
+
+                <LinearLayout
+                    android:id="@+id/input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/background_edittext"
-                    android:drawableStart="@drawable/ic_person"
-                    android:drawableLeft="@drawable/ic_person"
-                    android:drawablePadding="20dp"
-                    android:hint="@string/name"
-                    android:inputType="text"
-                    android:padding="6dp"
-                    android:textColor="@color/background_dark">
-                    <requestFocus/>
-                </EditText>
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/email_et"
+                    <EditText
+                        android:id="@+id/name_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_height"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/background_edittext"
+                        android:drawableStart="@drawable/ic_person"
+                        android:drawableLeft="@drawable/ic_person"
+                        android:drawablePadding="20dp"
+                        android:hint="@string/name"
+                        android:inputType="text"
+                        android:padding="6dp"
+                        android:textColor="@color/background_dark">
+
+                        <requestFocus />
+                    </EditText>
+
+                    <EditText
+                        android:id="@+id/email_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_height"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/background_edittext"
+                        android:drawableStart="@drawable/ic_email"
+                        android:drawableLeft="@drawable/ic_email"
+                        android:drawablePadding="20dp"
+                        android:hint="@string/email_address"
+                        android:inputType="textEmailAddress"
+                        android:padding="6dp"
+                        android:textColor="@color/background_dark" />
+
+                    <EditText
+                        android:id="@+id/mobile_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_height"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/background_edittext"
+                        android:drawableStart="@drawable/ic_phone"
+                        android:drawableLeft="@drawable/ic_phone"
+                        android:drawablePadding="20dp"
+                        android:hint="@string/mobile_no"
+                        android:inputType="number"
+                        android:padding="6dp"
+                        android:textColor="@color/background_dark" />
+
+                    <EditText
+                        android:id="@+id/adhar_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_height"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/background_edittext"
+                        android:drawableStart="@drawable/ic_featured_play_list"
+                        android:drawableLeft="@drawable/ic_featured_play_list"
+                        android:drawablePadding="20dp"
+                        android:hint="@string/Adhar_id"
+                        android:inputType="number"
+                        android:padding="6dp"
+                        android:textColor="@color/background_dark" />
+
+                    <EditText
+                        android:id="@+id/pin_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_height"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/background_edittext"
+                        android:drawableStart="@drawable/ic_local_post_office"
+                        android:drawableLeft="@drawable/ic_local_post_office"
+                        android:drawablePadding="20dp"
+                        android:hint="@string/pin_code"
+                        android:inputType="text"
+                        android:padding="6dp"
+                        android:textColor="@color/background_dark" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:hintEnabled="false"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/colorAccent">
+
+                        <EditText
+                            android:id="@+id/pass_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/background_edittext"
+                            android:drawableStart="@drawable/ic_vpn_key"
+                            android:drawableLeft="@drawable/ic_vpn_key"
+                            android:drawablePadding="20dp"
+                            android:hint="@string/password"
+                            android:inputType="textPassword"
+                            android:padding="6dp"
+                            android:textColor="@color/background_dark" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/register_btn"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/background_edittext"
-                    android:drawableStart="@drawable/ic_email"
-                    android:drawableLeft="@drawable/ic_email"
-                    android:drawablePadding="20dp"
-                    android:hint="@string/email_address"
-                    android:inputType="textEmailAddress"
-                    android:padding="6dp"
+                    android:layout_below="@id/input_layout"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/button_background"
+                    android:onClick="@{() -> clickHandler.clickOnSignUp()}"
+                    android:text="@string/register"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/login_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/register_btn"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="12dp"
+                    android:onClick="@{() -> clickHandler.clickOnLogIn()}"
+                    android:text="@string/already_member"
                     android:textColor="@color/background_dark" />
-                <EditText
-                    android:id="@+id/mobile_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/background_edittext"
-                    android:drawableStart="@drawable/ic_phone"
-                    android:drawableLeft="@drawable/ic_phone"
-                    android:drawablePadding="20dp"
-                    android:hint="@string/mobile_no"
-                    android:inputType="number"
-                    android:padding="6dp"
-                    android:textColor="@color/background_dark" />
-                <EditText
-                    android:id="@+id/adhar_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/background_edittext"
-                    android:drawableStart="@drawable/ic_featured_play_list"
-                    android:drawableLeft="@drawable/ic_featured_play_list"
-                    android:drawablePadding="20dp"
-                    android:hint="@string/Adhar_id"
-                    android:inputType="number"
-                    android:padding="6dp"
-                    android:textColor="@color/background_dark" />
-                <EditText
-                    android:id="@+id/pin_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/background_edittext"
-                    android:drawableStart="@drawable/ic_local_post_office"
-                    android:drawableLeft="@drawable/ic_local_post_office"
-                    android:drawablePadding="20dp"
-                    android:hint="@string/pin_code"
-                    android:inputType="text"
-                    android:padding="6dp"
-                    android:textColor="@color/background_dark" />
-                <EditText
-                    android:id="@+id/pass_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/background_edittext"
-                    android:drawableStart="@drawable/ic_vpn_key"
-                    android:drawableLeft="@drawable/ic_vpn_key"
-                    android:drawablePadding="20dp"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
-                    android:padding="6dp"
-                    android:textColor="@color/background_dark" />
-
-            </LinearLayout>
-
-
-            <Button
-                android:id="@+id/register_btn"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/input_layout"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_background"
-                android:text="@string/register"
-                android:textColor="@android:color/white"
-                android:onClick="@{() -> clickHandler.clickOnSignUp()}"/>
-
-            <TextView
-                android:id="@+id/login_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/register_btn"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="12dp"
-                android:text="@string/already_member"
-                android:textColor="@color/background_dark"
-                android:onClick="@{() -> clickHandler.clickOnLogIn()}"/>
-        </RelativeLayout>
+            </RelativeLayout>
+        </ScrollView>
 
     </RelativeLayout>
 </layout>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="clickHandler"
             type="com.example.stayathome.ui.login.LoginViewModel" />
@@ -36,14 +38,14 @@
                 android:text="@string/login"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/white"
-                android:visibility="visible"/>
+                android:visibility="visible" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="24dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:id="@+id/input_layout"
@@ -58,7 +60,7 @@
                 <EditText
                     android:id="@+id/et_mobile"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/editText_height"
                     android:layout_margin="8dp"
                     android:background="@drawable/background_edittext"
                     android:drawableStart="@drawable/ic_phone"
@@ -68,11 +70,12 @@
                     android:inputType="number"
                     android:padding="6dp"
                     android:textColor="@color/background_dark">
-                    <requestFocus/>
+
+                    <requestFocus />
                 </EditText>
 
-                <EditText
-                    android:id="@+id/et_password"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_password1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -83,7 +86,31 @@
                     android:hint="@string/password"
                     android:inputType="textPassword"
                     android:padding="6dp"
-                    android:textColor="@color/background_dark" />
+                    android:textColor="@color/background_dark"
+                    android:visibility="gone" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:hintEnabled="false"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/background_edittext"
+                        android:drawableStart="@drawable/ic_vpn_key"
+                        android:drawableLeft="@drawable/ic_vpn_key"
+                        android:drawablePadding="20dp"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:padding="6dp"
+                        android:textColor="@color/background_dark" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -109,8 +136,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_background"
-                android:text="@string/login"
                 android:onClick="@{() -> clickHandler.clickOnLogIn()}"
+                android:text="@string/login"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -120,9 +147,9 @@
                 android:layout_below="@+id/login_bt"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="12dp"
+                android:onClick="@{() -> clickHandler.clickOnSignUp()}"
                 android:text="@string/don_t_have_an_account"
-                android:textColor="@color/background_dark"
-                android:onClick="@{() -> clickHandler.clickOnSignUp()}"/>
+                android:textColor="@color/background_dark" />
         </RelativeLayout>
 
     </LinearLayout>

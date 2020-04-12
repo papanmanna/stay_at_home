@@ -9,7 +9,8 @@ import com.example.stayathome.models.Station;
 public class UserManager {
 
 
-    private static final String USER_NAME = "name";
+    private static final String USER_FNAME = "fname";
+    private static final String USER_LNAME = "lname";
     private static final String USER_AADHAAR = "aadhaar";
     private static final String USER_PIN = "pin";
     private static final String USER_POLICE_STATION_ID = "pstation_id";
@@ -53,8 +54,9 @@ public class UserManager {
         editor.apply();
     }
 
-    public void updateUserData(String name, String aadhaarId, String pinCode, Station policeStation, String email, String phone) {
-        editor.putString(USER_NAME, name);
+    public void updateUserData(String fName, String lName, String aadhaarId, String pinCode, Station policeStation, String email, String phone) {
+        editor.putString(USER_FNAME, fName);
+        editor.putString(USER_LNAME, lName);
         editor.putString(USER_AADHAAR, aadhaarId);
         editor.putString(USER_PIN, pinCode);
         if (policeStation != null) {
@@ -70,8 +72,12 @@ public class UserManager {
         return sharedPreferences.getString(USER_POLICE_STATION_ID, "");
     }
 
-    public String getUserName() {
-        return sharedPreferences.getString(USER_NAME, "");
+    public String getUserFname() {
+        return sharedPreferences.getString(USER_FNAME, "");
+    }
+
+    public String getUserLname() {
+        return sharedPreferences.getString(USER_LNAME, "");
     }
 
     public String getUserAadhaar() {

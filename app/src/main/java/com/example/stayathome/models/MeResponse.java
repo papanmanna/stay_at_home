@@ -35,8 +35,10 @@ public class MeResponse {
     }
 
     public class Result {
-        @SerializedName("userName")
-        private String name;
+        @SerializedName("firstName")
+        private String firstName;
+        @SerializedName("lastName")
+        private String lastName;
         @SerializedName("email")
         private String email;
         @SerializedName("phone")
@@ -48,12 +50,20 @@ public class MeResponse {
         @SerializedName("station")
         private Station station;
 
-        public String getName() {
-            return name;
+        public String getFirstName() {
+            return firstName;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
         }
 
         public String getEmail() {

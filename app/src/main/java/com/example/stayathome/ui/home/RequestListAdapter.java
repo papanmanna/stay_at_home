@@ -41,12 +41,15 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
         switch (requestDataList.get(i).getStatus()) {
             case "ACTIVE":
                 myViewHolder.binding.parent.setStrokeColor(context.getResources().getColor(R.color.colorPrimary));
+                myViewHolder.binding.statusTv.setBackground(context.getResources().getDrawable(R.drawable.pending_background));
                 break;
             case "APPROVED":
                 myViewHolder.binding.parent.setStrokeColor(context.getResources().getColor(R.color.green));
+                myViewHolder.binding.statusTv.setBackground(context.getResources().getDrawable(R.drawable.accepted_background));
                 break;
             case "REJECTED":
                 myViewHolder.binding.parent.setStrokeColor(context.getResources().getColor(R.color.red));
+                myViewHolder.binding.statusTv.setBackground(context.getResources().getDrawable(R.drawable.rejected_background));
                 break;
         }
         myViewHolder.binding.timeTv.setText(timeModelList.get(requestDataList.get(i).getStartHour()).value

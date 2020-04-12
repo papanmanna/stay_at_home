@@ -19,6 +19,13 @@ import com.example.stayathome.ui.registration.RegisterFragment;
 import com.example.stayathome.utils.UserManager;
 import com.example.stayathome.utils.ViewDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import retrofit2.Response;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -52,16 +59,28 @@ public class LoginFragment extends Fragment implements LoginViewModel {
     }
 
     @Override
-    public void setLoginView(LogInResponse logInResponse) {
+    public void setLoginView(Response<LogInResponse> response) {
         viewDialog.hideDialog();
-        if (logInResponse.isStatus()) {
-            UserManager.getInstance().loginUser(logInResponse.getToken(), true);
-            requireFragmentManager()
-                    .beginTransaction()
-                    .add(new MeFragment(), "userMe")
-                    .commit();
-        } else {
-            Toast.makeText(requireContext(), logInResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+        if (response.isSuccessful() && response.body() != null) {
+            if (response.body().isStatus()) {
+                UserManager.getInstance().loginUser(response.body().getToken(), true);
+                requireFragmentManager()
+                        .beginTransaction()
+                        .add(new MeFragment(), "userMe")
+                        .commit();
+            } else {
+                Toast.makeText(requireContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } else if (response.errorBody() != null) {
+            try {
+                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                Toast.makeText(requireActivity(), jObjError.optString("message"), Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

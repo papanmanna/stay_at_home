@@ -31,7 +31,7 @@ public class LoginPresenter {
 
                     @Override
                     public void onNext(Response<LogInResponse> logInResponse) {
-                        mViewModel.setLoginView(logInResponse.body());
+                        mViewModel.setLoginView(logInResponse);
                     }
 
                     @Override

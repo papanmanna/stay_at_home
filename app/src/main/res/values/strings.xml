@@ -56,8 +56,12 @@
     <string name="submit_request">Submit Request</string>
     <string name="mm_dd_yyyy">DD/MM/YYYY</string>
     <string name="reason">Reason *</string>
-    <string name="id">ID :</string>
+    <string name="id">ID:</string>
     <string name="request">Create request to your local police station before leaving out from home\n\nStay home, stay safe</string>
     <string name="no_request_yet">No request yet !!</string>
     <string name="to">" - "</string>
+    <string name="otp_not_verified">Invalid OTP</string>
+    <string name="atert">Alert</string>
+    <string name="alert_body">Your local police station is no longer registered with this application. Plese contact with your local police station.</string>
+    <string name="ok">OK</string>
 </resources>

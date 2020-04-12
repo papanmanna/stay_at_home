@@ -1,6 +1,7 @@
 package com.example.stayathome.ui.request;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -45,6 +46,7 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
     private List<TimeModel> timeModelList = new ArrayList<>();
     private ViewDialog viewDialog;
     private int startHour, endHour;
+    private DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,22 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
 
             }
         });
+        initDateTime();
+    }
+
+    private void initDateTime() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                mBinding.dateEt.setText(day + "/" + month + "/" + year);
+            }
+        }, year, month, dayOfMonth);
+        datePickerDialog.setTitle("Select Date");
+        mBinding.dateEt.setText(dayOfMonth + "/" + month + "/" + year);
     }
 
     @Override
@@ -132,17 +150,6 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
 
     @Override
     public void clickOnDate() {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                mBinding.dateEt.setText(day + "/" + month + "/" + year);
-            }
-        }, year, month, dayOfMonth);
-        datePickerDialog.setTitle("Select Date");
         datePickerDialog.show();
     }
 
@@ -207,6 +214,7 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
             return;
         }
         if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+            setResult(Activity.RESULT_OK);
             finish();
         } else if (response.errorBody() != null) {
             try {

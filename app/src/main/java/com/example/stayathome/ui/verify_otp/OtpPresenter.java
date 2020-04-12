@@ -18,9 +18,9 @@ public class OtpPresenter {
         this.mViewModel = view;
     }
 
-    void signUp(String userName, String email, String mobile, String aadhaar, String pinCode, String password) {
+    void signUp(String firstName, String lastName, String email, String mobile, String aadhaar, String pinCode, String password) {
         ServiceGenerator.getClient().create(ApiInterface.class)
-                .signUp(userName, email, password, mobile, aadhaar, pinCode)
+                .signUp(firstName, lastName, email, password, mobile, aadhaar, pinCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<RegistrationResponse>>() {

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.msg91.sendotpandroid.library:library:1.3.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4463165a69ef044140e9351ceaa81ee4/jetified-library-1.3.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4463165a69ef044140e9351ceaa81ee4/jetified-library-1.3.1/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.msg91.sendotpandroid.library/library/1.3.1/53d101e5a65a06f9bb7512608a37a4fbc359ae03/library-1.3.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.msg91.sendotpandroid.library/library/1.3.1/dbbf3dd55ebed8f5c56e6774e4ca6fcbf66b36db/library-1.3.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

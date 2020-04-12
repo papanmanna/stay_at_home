@@ -64,6 +64,8 @@ public class RegisterFragment extends Fragment implements RegisterViewModel {
     @Override
     public void clickOnSignUp() {
         String name = mBinding.nameEt.getText().toString();
+        String firstName = "", lastName = "";
+        String[] splitStr = name.split("\\s+");
         String phone = mBinding.mobileEt.getText().toString();
         String email = mBinding.emailEt.getText().toString();
         String adharId = mBinding.adharEt.getText().toString();
@@ -73,6 +75,11 @@ public class RegisterFragment extends Fragment implements RegisterViewModel {
         if (TextUtils.isEmpty(name)) {
             mBinding.nameEt.setError(getString(R.string.error_name));
             return;
+        } else if (splitStr.length > 1) {
+            firstName = splitStr[0];
+            lastName = splitStr[1];
+        } else {
+            firstName = splitStr[0];
         }
         if (TextUtils.isEmpty(phone) || phone.length() < 10) {
             mBinding.mobileEt.setError(getString(R.string.error_mobile_length));
@@ -106,7 +113,8 @@ public class RegisterFragment extends Fragment implements RegisterViewModel {
 
         OtpFragment otpFragment = new OtpFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("name", name);
+        bundle.putString("firstName", firstName);
+        bundle.putString("lastName", lastName);
         bundle.putString("email", email);
         bundle.putString("mobile", phone);
         bundle.putString("aadhaar", adharId);
