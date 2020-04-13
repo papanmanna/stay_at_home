@@ -62,8 +62,8 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
         mBinding.startTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                startHour = position;
-                TimeListAdapter arrayAdapter = new TimeListAdapter(RequestActivity.this, R.layout.item_time, timeModelList.subList(position, 24));
+                startHour = timeModelList.get(position).key;
+                TimeListAdapter arrayAdapter = new TimeListAdapter(RequestActivity.this, R.layout.item_time, timeModelList.subList(position + 1, 24));
                 mBinding.endTimeSpinner.setAdapter(arrayAdapter);
 
             }
@@ -76,7 +76,10 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
         mBinding.endTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                endHour = position;
+                if (timeModelList.size() > mBinding.startTimeSpinner.getSelectedItemPosition() + 1)
+                    endHour = timeModelList.get(mBinding.startTimeSpinner.getSelectedItemPosition() + position + 1).key;
+                else
+                    endHour = 0;
             }
 
             @Override
@@ -137,6 +140,13 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
                         TimeListAdapter arrayAdapter = new TimeListAdapter(RequestActivity.this, R.layout.item_time, timeModelList);
                         mBinding.endTimeSpinner.setAdapter(arrayAdapter);
                         mBinding.startTimeSpinner.setAdapter(arrayAdapter);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mBinding.startTimeSpinner.setSelection(0);
+                            }
+                        });
+
 
                     }
 
@@ -193,6 +203,10 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
         }
         if (TextUtils.isEmpty(date)) {
             mBinding.dateEt.setError("Select date");
+            return;
+        }
+        if (startHour >= endHour) {
+            Toast.makeText(this, "You are not allowed at this time", Toast.LENGTH_SHORT).show();
             return;
         }
 

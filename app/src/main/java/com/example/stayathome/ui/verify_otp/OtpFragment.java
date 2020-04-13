@@ -78,7 +78,7 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
                 .setMobileNumber(mobile)
                 .setVerifyWithoutOtp(true)//direct verification while connect with mobile network
                 .setAutoVerification(requireActivity())//Auto read otp from Sms And Verify
-                .setSenderId("ABCDEF")
+                .setSenderId("StyHom")
                 .setMessage("##OTP## is Your verification digits.")
                 .setOtpLength(4)
                 .setVerificationCallBack(this).build();

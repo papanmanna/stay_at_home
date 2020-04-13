@@ -1,5 +1,6 @@
 package com.example.stayathome.ui.registration;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -11,22 +12,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.stayathome.GPSManagerHelper;
 import com.example.stayathome.R;
 import com.example.stayathome.databinding.FragmentRegisterBinding;
 import com.example.stayathome.models.RegistrationResponse;
 import com.example.stayathome.ui.verify_otp.OtpFragment;
 import com.example.stayathome.utils.ViewDialog;
 
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RegisterFragment extends Fragment implements RegisterViewModel {
+public class RegisterFragment extends Fragment implements RegisterViewModel, GPSManagerHelper.LocationListener {
 
     private FragmentRegisterBinding mBinding;
     private RegisterPresenter mPresenter;
     private ViewDialog viewDialog;
+    GPSManagerHelper gpsManagerHelper;
+    private int PERMISSION_ID = 44;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -49,16 +54,9 @@ public class RegisterFragment extends Fragment implements RegisterViewModel {
         mPresenter = new RegisterPresenter();
         mPresenter.setView(this);
         viewDialog = new ViewDialog(requireActivity());
-    }
-
-    @Override
-    public void setRegistrationView(RegistrationResponse response) {
-        viewDialog.hideDialog();
-    }
-
-    @Override
-    public void onError(String error) {
-        viewDialog.hideDialog();
+        gpsManagerHelper = new GPSManagerHelper(requireActivity());
+        gpsManagerHelper.setLocationListener(this);
+        gpsManagerHelper.getLastLocation();
     }
 
     @Override
@@ -138,5 +136,26 @@ public class RegisterFragment extends Fragment implements RegisterViewModel {
         requireActivity()
                 .getSupportFragmentManager()
                 .popBackStack();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Granted. Start getting the location information
+                gpsManagerHelper.getLastLocation();
+            }
+        }
+    }
+
+    @Override
+    public void onTakeLocation(double latitude, double longitude) {
+        try {
+            String zipcode = gpsManagerHelper.getZipCode(latitude, longitude);
+            mBinding.pinEt.setText(zipcode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
