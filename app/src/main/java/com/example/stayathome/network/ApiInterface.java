@@ -6,6 +6,7 @@ import com.example.stayathome.models.GetRequestResponse;
 import com.example.stayathome.models.LogInResponse;
 import com.example.stayathome.models.MeResponse;
 import com.example.stayathome.models.RegistrationResponse;
+import com.example.stayathome.ui.reset_password.ResetPasswordResponse;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -42,7 +43,11 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("v1/users/requests")
     Observable<Response<CreateRequestResponse>> create(@Header("Authorization") String authkey, @Field("stationId") String stationId, @Field("reason") String reason,
-                                                       @Field("date") long date, @Field("startHour") int startHour, @Field("endHour") int endHour, @Field("personCount") int count);
+                                                       @Field("date") long date, @Field("startHour") int startHour, @Field("endHour") int endHour, @Field("latitude") double lat, @Field("longitude") double lon, @Field("address") String address, @Field("personCount") int count);
 
 
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST("v1/users/resetpassword")
+    Observable<Response<ResetPasswordResponse>> resetPassword(@Field("phone") String phone, @Field("newPassword") String newPassword);
 }

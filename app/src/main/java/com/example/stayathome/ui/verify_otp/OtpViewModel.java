@@ -8,7 +8,6 @@ public interface OtpViewModel {
     void clickOnVerify();
     void clickOnResend();
     void setRegistrationView(Response<RegistrationResponse> response);
-
     void onError(String error);
 
 }

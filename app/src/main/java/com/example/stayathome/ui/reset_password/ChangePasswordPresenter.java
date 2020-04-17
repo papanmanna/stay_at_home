@@ -1,9 +1,7 @@
-package com.example.stayathome.ui.request;
+package com.example.stayathome.ui.reset_password;
 
-import com.example.stayathome.models.CreateRequestResponse;
 import com.example.stayathome.network.ApiInterface;
 import com.example.stayathome.network.ServiceGenerator;
-import com.example.stayathome.utils.UserManager;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -11,33 +9,33 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class RequestPresenter {
+public class ChangePasswordPresenter {
 
-    RequestViewModel viewModel;
+    private ChangePasswordViewModel mViewModel;
 
-    void setViewModel(RequestViewModel viewModel) {
-        this.viewModel = viewModel;
+    public void setView(ChangePasswordViewModel viewModel) {
+        this.mViewModel = viewModel;
     }
 
-    public void createRequest(String stationId, String reason, long date, int startHour, int endHour, double lat, double lon, String address, int personCount) {
+    void changePassword(String phone, String password) {
         ServiceGenerator.getClient().create(ApiInterface.class)
-                .create(UserManager.getInstance().getBearerAccessToken(), stationId, reason, date, startHour, endHour, lat, lon, address, personCount)
+                .resetPassword(phone, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<CreateRequestResponse>>() {
+                .subscribe(new Observer<Response<ResetPasswordResponse>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(Response<CreateRequestResponse> response) {
-                        viewModel.setHomeView(response);
+                    public void onNext(Response<ResetPasswordResponse> logInResponse) {
+                        mViewModel.setChangePasswordView(logInResponse);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        viewModel.onError(e.getMessage());
+                        mViewModel.onError(e.getMessage());
                     }
 
                     @Override
@@ -45,6 +43,5 @@ public class RequestPresenter {
 
                     }
                 });
-
     }
 }

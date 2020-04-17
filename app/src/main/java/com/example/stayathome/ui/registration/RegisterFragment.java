@@ -1,6 +1,7 @@
 package com.example.stayathome.ui.registration;
 
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -12,11 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.stayathome.GPSManagerHelper;
 import com.example.stayathome.R;
 import com.example.stayathome.databinding.FragmentRegisterBinding;
-import com.example.stayathome.models.RegistrationResponse;
 import com.example.stayathome.ui.verify_otp.OtpFragment;
+import com.example.stayathome.utils.GPSManagerHelper;
 import com.example.stayathome.utils.ViewDialog;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class RegisterFragment extends Fragment implements RegisterViewModel, GPS
     private FragmentRegisterBinding mBinding;
     private RegisterPresenter mPresenter;
     private ViewDialog viewDialog;
-    GPSManagerHelper gpsManagerHelper;
+    private GPSManagerHelper gpsManagerHelper;
     private int PERMISSION_ID = 44;
 
     public RegisterFragment() {
@@ -56,8 +56,9 @@ public class RegisterFragment extends Fragment implements RegisterViewModel, GPS
         viewDialog = new ViewDialog(requireActivity());
         gpsManagerHelper = new GPSManagerHelper(requireActivity());
         gpsManagerHelper.setLocationListener(this);
-        gpsManagerHelper.getLastLocation();
+        gpsManagerHelper.getLastLocation(false);
     }
+
 
     @Override
     public void clickOnSignUp() {
@@ -144,15 +145,15 @@ public class RegisterFragment extends Fragment implements RegisterViewModel, GPS
         if (requestCode == PERMISSION_ID) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Granted. Start getting the location information
-                gpsManagerHelper.getLastLocation();
+                gpsManagerHelper.getLastLocation(false);
             }
         }
     }
 
     @Override
-    public void onTakeLocation(double latitude, double longitude) {
+    public void onTakeLocation(Location location) {
         try {
-            String zipcode = gpsManagerHelper.getZipCode(latitude, longitude);
+            String zipcode = gpsManagerHelper.getZipCode(location.getLatitude(), location.getLongitude());
             mBinding.pinEt.setText(zipcode);
         } catch (IOException e) {
             e.printStackTrace();

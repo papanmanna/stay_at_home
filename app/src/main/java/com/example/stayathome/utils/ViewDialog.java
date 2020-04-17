@@ -49,9 +49,11 @@ public class ViewDialog {
         //...finaly show it
         dialog.show();
     }
+
     //..also create a method which will hide the dialog when some work is done
     public void hideDialog() {
-        dialog.dismiss();
+        if (dialog != null)
+            dialog.dismiss();
     }
 
 }

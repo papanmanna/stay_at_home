@@ -4,17 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity"
-    android:background="@drawable/side_nav_bar">
+    android:background="@drawable/side_nav_bar"
+    tools:context=".SplashActivity">
+
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_stay_home"
         android:adjustViewBounds="true"
+        android:src="@drawable/ic_stay_home"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

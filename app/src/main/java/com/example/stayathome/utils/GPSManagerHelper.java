@@ -1,4 +1,4 @@
-package com.example.stayathome;
+package com.example.stayathome.utils;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
@@ -35,12 +36,12 @@ public class GPSManagerHelper {
     private Activity activity;
     private LocationListener locationListener;
 
-    FusedLocationProviderClient mFusedLocationClient;
+    private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
-            locationListener.onTakeLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            locationListener.onTakeLocation(mLastLocation);
         }
     };
 
@@ -58,7 +59,7 @@ public class GPSManagerHelper {
                 ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestPermissions() {
+    public void requestPermissions() {
         ActivityCompat.requestPermissions(
                 activity,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
@@ -68,13 +69,10 @@ public class GPSManagerHelper {
 
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER
-        );
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    private void requestNewLocationData() {
-
+    public void requestNewLocationData() {
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(0);
@@ -90,7 +88,7 @@ public class GPSManagerHelper {
     }
 
     @SuppressLint("MissingPermission")
-    public void getLastLocation() {
+    public void getLastLocation(final boolean isNew) {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(
@@ -98,10 +96,10 @@ public class GPSManagerHelper {
                             @Override
                             public void onComplete(@NonNull Task<Location> task) {
                                 Location location = task.getResult();
-                                if (location == null) {
+                                if (location == null || isNew) {
                                     requestNewLocationData();
                                 } else {
-                                    locationListener.onTakeLocation(location.getLatitude(), location.getLongitude());
+                                    locationListener.onTakeLocation(location);
                                 }
                             }
                         }
@@ -122,7 +120,28 @@ public class GPSManagerHelper {
         return addresses.get(0).getPostalCode();
     }
 
+    public String getAddress(double lat, double lon) throws IOException {
+        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+        List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+        return addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName() + ", " +
+                addresses.get(0).getPostalCode();
+    }
+
+    public boolean isMockLocationOn(Location location, Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return location.isFromMockProvider();
+        } else {
+            String mockLocation = "0";
+            try {
+                mockLocation = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return !mockLocation.equals("0");
+        }
+    }
+
     public interface LocationListener {
-        void onTakeLocation(double latitude, double longitude);
+        void onTakeLocation(Location location);
     }
 }

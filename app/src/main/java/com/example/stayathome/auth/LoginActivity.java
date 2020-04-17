@@ -31,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
                 .replace(R.id.container, new LoginFragment())
                 .commit();
 
-
     }
 
     @Override

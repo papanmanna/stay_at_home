@@ -1,25 +1,37 @@
 package com.example.stayathome.ui.request;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.stayathome.R;
 import com.example.stayathome.auth.LoginActivity;
 import com.example.stayathome.databinding.ActivityRequestBinding;
 import com.example.stayathome.models.CreateRequestResponse;
+import com.example.stayathome.models.Station;
 import com.example.stayathome.models.TimeModel;
+import com.example.stayathome.utils.GPSManagerHelper;
 import com.example.stayathome.utils.UserManager;
 import com.example.stayathome.utils.Utils;
 import com.example.stayathome.utils.ViewDialog;
@@ -38,7 +50,7 @@ import java.util.List;
 
 import retrofit2.Response;
 
-public class RequestActivity extends AppCompatActivity implements RequestViewModel {
+public class RequestActivity extends AppCompatActivity implements RequestViewModel, GPSManagerHelper.LocationListener {
 
     private static final int PICK_FILE_RESULT_CODE = 111;
     ActivityRequestBinding mBinding;
@@ -47,6 +59,13 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
     private ViewDialog viewDialog;
     private int startHour, endHour;
     private DatePickerDialog datePickerDialog;
+    private GPSManagerHelper gpsManagerHelper;
+    private int PERMISSION_ID = 44;
+    private boolean isSettingOpen, isMockEnabled;
+    List<Station> stations;
+    private String policeStationId;
+    private double lat, lon;
+    private String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +74,6 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
         mBinding.setHandler(this);
         presenter = new RequestPresenter();
         presenter.setViewModel(this);
-        mBinding.psTv.setText(UserManager.getInstance().getUserPoliceStationName());
         mBinding.pinTv.setText(UserManager.getInstance().getUserPin());
         getTimeList();
         viewDialog = new ViewDialog(this);
@@ -87,7 +105,38 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
 
             }
         });
+        gpsManagerHelper = new GPSManagerHelper(this);
+        gpsManagerHelper.setLocationListener(this);
+        gpsManagerHelper.getLastLocation(false);
         initDateTime();
+        initStationSpinner();
+    }
+
+    private void initStationSpinner() {
+        stations = UserManager.getInstance().getUserPoliceStations();
+        StationListAdapter arrayAdapter = new StationListAdapter(RequestActivity.this, R.layout.item_time, stations);
+        mBinding.pspinner.setAdapter(arrayAdapter);
+        mBinding.pspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                policeStationId = stations.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isSettingOpen && gpsManagerHelper != null) {
+            gpsManagerHelper.getLastLocation(true);
+            isSettingOpen = false;
+        }
+
     }
 
     private void initDateTime() {
@@ -197,6 +246,11 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
     public void clickOnSubmit() {
         String reason = mBinding.reasonEt.getText().toString();
         String date = mBinding.dateEt.getText().toString();
+        if (policeStationId == null || TextUtils.isEmpty(policeStationId)) {
+            TextView errorText = (TextView) mBinding.pspinner.getSelectedView();
+            errorText.setError("Select police station");
+            return;
+        }
         if (TextUtils.isEmpty(reason)) {
             mBinding.reasonEt.setError("Please provide reason");
             return;
@@ -210,8 +264,14 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
             return;
         }
 
+        if (address == null) {
+            Toast.makeText(this, "Unable to detect location", Toast.LENGTH_SHORT).show();
+            gpsManagerHelper.getLastLocation(true);
+            return;
+        }
+
         viewDialog.showDialog();
-        presenter.createRequest(UserManager.getInstance().getUserPoliceStationId(), reason, Utils.getMillisFromDate(date), startHour, endHour, 1);
+        presenter.createRequest(policeStationId, reason, Utils.getMillisFromDate(date), startHour, endHour, lat, lon, address, 1);
 
     }
 
@@ -245,5 +305,65 @@ public class RequestActivity extends AppCompatActivity implements RequestViewMod
     @Override
     public void onError(String message) {
         viewDialog.hideDialog();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Granted. Start getting the location information
+                gpsManagerHelper.getLastLocation(false);
+            } else if (Build.VERSION.SDK_INT >= 23 && !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // User selected the Never Ask Again Option Change settings in app settings manually
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder
+                        .setTitle(getResources().getString(R.string.alert_title))
+                        .setMessage(getResources().getString(R.string.alert_location_body))
+                        .setCancelable(false)
+                        .setPositiveButton("SETTINGS", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                isSettingOpen = true;
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            }
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+            } else {
+                // User selected Deny Dialog to EXIT App ==> OR <== RETRY to have a second chance to Allow Permissions
+                gpsManagerHelper.requestPermissions();
+            }
+        }
+    }
+
+    @Override
+    public void onTakeLocation(Location location) {
+        if (!gpsManagerHelper.isMockLocationOn(location, this)) {
+            lat = location.getLatitude();
+            lon = location.getLongitude();
+            try {
+                address = gpsManagerHelper.getAddress(lat, lon);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder
+                    .setTitle(getResources().getString(R.string.alert_title))
+                    .setMessage(getResources().getString(R.string.alert_mock_location_body))
+                    .setCancelable(false)
+                    .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                        }
+                    });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
     }
 }

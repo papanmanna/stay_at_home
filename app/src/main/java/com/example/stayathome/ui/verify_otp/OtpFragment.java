@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.stayathome.R;
 import com.example.stayathome.databinding.FragmentOtpBinding;
 import com.example.stayathome.models.RegistrationResponse;
+import com.example.stayathome.ui.reset_password.ChangePasswordFragment;
 import com.example.stayathome.utils.ViewDialog;
 import com.msg91.sendotpandroid.library.internal.SendOTP;
 import com.msg91.sendotpandroid.library.listners.VerificationListener;
@@ -37,6 +38,7 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
     private String firstName, lastName, mobile, email, aadhaarId, password, pinCode;
     private OtpPresenter mPresenter;
     private ViewDialog viewDialog;
+    private boolean isResetPassword;
 
     public OtpFragment() {
         // Required empty public constructor
@@ -57,6 +59,7 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
             aadhaarId = getArguments().getString("aadhaar");
             pinCode = getArguments().getString("pin");
             password = getArguments().getString("password");
+            isResetPassword = getArguments().getBoolean("isResetPassword", false);
         }
         return mBinding.getRoot();
     }
@@ -94,7 +97,10 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
                 if (responseCode == SendOTPResponseCode.DIRECT_VERIFICATION_SUCCESSFUL_FOR_NUMBER || responseCode == SendOTPResponseCode.OTP_VERIFIED) {
                     //otp verified OR direct verified by send otp 2.O
                     Toast.makeText(requireContext(), getString(R.string.successfull_verify_otp), Toast.LENGTH_SHORT).show();
-                    signUp();
+                    if (isResetPassword)
+                        navigateToChangePassword();
+                    else
+                        signUp();
                 } else if (responseCode == SendOTPResponseCode.READ_OTP_SUCCESS) {
                     //Auto read otp from sms successfully
                     // you can get otp form message filled
@@ -109,9 +115,28 @@ public class OtpFragment extends Fragment implements VerificationListener, OtpVi
                 } else if (responseCode == SendOTPResponseCode.SERVER_ERROR_OTP_NOT_VERIFIED) {
                     //exception found
                     Toast.makeText(requireContext(), getString(R.string.otp_not_verified), Toast.LENGTH_SHORT).show();
+                } else if (responseCode == SendOTPResponseCode.SERVER_ERROR_ALREADY_VERIFIED) {
+                    Toast.makeText(requireContext(), getString(R.string.already_verified), Toast.LENGTH_SHORT).show();
+                    if (isResetPassword)
+                        navigateToChangePassword();
                 }
             }
         });
+    }
+
+    private void navigateToChangePassword() {
+        ChangePasswordFragment fragment = new ChangePasswordFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("mobile", mobile);
+        fragment.setArguments(bundle);
+
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack("change_password")
+                .commit();
+
     }
 
     private void signUp() {

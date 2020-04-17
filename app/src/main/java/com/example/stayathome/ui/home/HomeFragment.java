@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import com.example.stayathome.R;
 import com.example.stayathome.auth.LoginActivity;
 import com.example.stayathome.databinding.FragmentHomeBinding;
 import com.example.stayathome.models.GetRequestResponse;
+import com.example.stayathome.models.Station;
 import com.example.stayathome.models.TimeModel;
 import com.example.stayathome.ui.request.RequestActivity;
 import com.example.stayathome.utils.UserManager;
@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,10 +119,10 @@ public class HomeFragment extends Fragment implements HomeViewModel {
 
     @Override
     public void clickOnCreateRequest() {
-        String id = UserManager.getInstance().getUserPoliceStationId();
-        if (id != null && !TextUtils.isEmpty(id))
+        List<Station> stations = UserManager.getInstance().getUserPoliceStations();
+        if (stations != null && stations.size() > 0) {
             startActivityForResult(new Intent(requireActivity(), RequestActivity.class), CREATE_REQUEST);
-        else {
+        } else {
             final AlertDialog alertDialog = new AlertDialog.Builder(requireContext()).create();
             alertDialog.setTitle(getString(R.string.atert));
             alertDialog.setMessage(getString(R.string.alert_body));
@@ -171,7 +172,7 @@ public class HomeFragment extends Fragment implements HomeViewModel {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CREATE_REQUEST && resultCode == Activity.RESULT_OK){
+        if (requestCode == CREATE_REQUEST && resultCode == Activity.RESULT_OK) {
             presenter.getAllRequest();
         }
     }

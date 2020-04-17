@@ -12,7 +12,7 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField"String","SEND_OTP_KEY",'"325669Apy4SLoSh5e8d6955P1"'
+        buildConfigField "String", "SEND_OTP_KEY", '"325669Apy4SLoSh5e8d6955P1"'
     }
 
     buildTypes {
@@ -41,12 +41,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     //pinEntry editText
-    implementation ('com.alimuzaffar.lib:pinentryedittext:2.0.6') {
+    implementation('com.alimuzaffar.lib:pinentryedittext:2.0.6') {
         // Exclude is only needed if you already have
         // androidx.appcompat as a dependency in your app.
         exclude group: 'androidx.appcompat', module: 'appcompat'
     }
-    
+
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     //msg91

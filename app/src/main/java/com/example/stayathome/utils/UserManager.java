@@ -5,6 +5,12 @@ import android.content.SharedPreferences;
 
 import com.example.stayathome.BaseApplication;
 import com.example.stayathome.models.Station;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserManager {
 
@@ -13,8 +19,7 @@ public class UserManager {
     private static final String USER_LNAME = "lname";
     private static final String USER_AADHAAR = "aadhaar";
     private static final String USER_PIN = "pin";
-    private static final String USER_POLICE_STATION_ID = "pstation_id";
-    private static final String USER_POLICE_STATION_NAME = "pstation_name";
+    private static final String USER_POLICE_STATIONS = "pstations";
     private static final String USER_EMAIL = "email";
     private static final String USER_PHONE = "phone";
     private static UserManager instance = null;
@@ -54,22 +59,25 @@ public class UserManager {
         editor.apply();
     }
 
-    public void updateUserData(String fName, String lName, String aadhaarId, String pinCode, Station policeStation, String email, String phone) {
+    public void updateUserData(String fName, String lName, String aadhaarId, String pinCode, List<Station> policeStation, String email, String phone) {
         editor.putString(USER_FNAME, fName);
         editor.putString(USER_LNAME, lName);
         editor.putString(USER_AADHAAR, aadhaarId);
         editor.putString(USER_PIN, pinCode);
         if (policeStation != null) {
-            editor.putString(USER_POLICE_STATION_ID, policeStation.getId());
-            editor.putString(USER_POLICE_STATION_NAME, policeStation.getStationName());
+            setList(USER_POLICE_STATIONS, policeStation);
         }
         editor.putString(USER_EMAIL, email);
         editor.putString(USER_PHONE, phone);
         editor.apply();
     }
 
-    public String getUserPoliceStationId() {
-        return sharedPreferences.getString(USER_POLICE_STATION_ID, "");
+    private <T> void setList(String key, List<T> list) {
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+
+        editor.putString(key, json);
+        editor.apply();
     }
 
     public String getUserFname() {
@@ -88,8 +96,17 @@ public class UserManager {
         return sharedPreferences.getString(USER_PIN, "");
     }
 
-    public String getUserPoliceStationName() {
-        return sharedPreferences.getString(USER_POLICE_STATION_NAME, "");
+
+    public List<Station> getUserPoliceStations() {
+        Gson gson = new Gson();
+        List<Station> stationsFromShared = new ArrayList<>();
+        String jsonPreferences = sharedPreferences.getString(USER_POLICE_STATIONS, "");
+
+        Type type = new TypeToken<List<Station>>() {
+        }.getType();
+        stationsFromShared = gson.fromJson(jsonPreferences, type);
+
+        return stationsFromShared;
     }
 
     public String getUserEmail() {

@@ -16,6 +16,7 @@ import com.example.stayathome.auth.MeFragment;
 import com.example.stayathome.databinding.FragmentLoginBinding;
 import com.example.stayathome.models.LogInResponse;
 import com.example.stayathome.ui.registration.RegisterFragment;
+import com.example.stayathome.ui.reset_password.ForgotPasswordFragment;
 import com.example.stayathome.utils.UserManager;
 import com.example.stayathome.utils.ViewDialog;
 
@@ -112,6 +113,16 @@ public class LoginFragment extends Fragment implements LoginViewModel {
                 .beginTransaction()
                 .replace(R.id.container, new RegisterFragment())
                 .addToBackStack("registration")
+                .commit();
+    }
+
+    @Override
+    public void clickOnForgotPassword() {
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, new ForgotPasswordFragment())
+                .addToBackStack("forgot_password")
                 .commit();
     }
 }

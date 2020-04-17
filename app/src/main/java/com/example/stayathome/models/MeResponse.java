@@ -2,6 +2,8 @@ package com.example.stayathome.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class MeResponse {
     @SerializedName("status")
     private boolean status;
@@ -48,7 +50,7 @@ public class MeResponse {
         @SerializedName("pinCode")
         private String pinCode;
         @SerializedName("station")
-        private Station station;
+        private List<Station> station;
 
         public String getFirstName() {
             return firstName;
@@ -98,11 +100,11 @@ public class MeResponse {
             this.pinCode = pinCode;
         }
 
-        public Station getStation() {
+        public List<Station> getStation() {
             return station;
         }
 
-        public void setStation(Station station) {
+        public void setStation(List<Station> station) {
             this.station = station;
         }
     }

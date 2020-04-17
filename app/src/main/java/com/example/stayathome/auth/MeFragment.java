@@ -28,6 +28,7 @@ import retrofit2.Response;
 public class MeFragment extends Fragment {
 
     private ViewDialog mViewDialog;
+    private boolean isFromSplash;
 
     public MeFragment() {
         // Required empty public constructor
@@ -37,12 +38,16 @@ public class MeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isFromSplash = getArguments().getBoolean("isFromSplash", false);
+        }
         mViewDialog = new ViewDialog(requireActivity());
         callMe();
     }
 
     private void callMe() {
-        mViewDialog.showDialog();
+        if (!isFromSplash)
+            mViewDialog.showDialog();
         ServiceGenerator.getClient().create(ApiInterface.class)
                 .me(UserManager.getInstance().getBearerAccessToken())
                 .subscribeOn(Schedulers.io())
@@ -66,10 +71,18 @@ public class MeFragment extends Fragment {
                             requireActivity().finish();
                         } else {
                             UserManager.getInstance().logOutUser();
-                            requireFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.container, new LoginFragment())
-                                    .commit();
+                            if (!isFromSplash) {
+                                requireFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.container, new LoginFragment())
+                                        .commit();
+                            } else {
+                                Intent intentMain = new Intent(requireContext(), LoginActivity.class);
+                                intentMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intentMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intentMain);
+                                requireActivity().finish();
+                            }
                         }
                     }
 
@@ -77,11 +90,19 @@ public class MeFragment extends Fragment {
                     public void onError(Throwable e) {
                         mViewDialog.hideDialog();
                         UserManager.getInstance().logOutUser();
-                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        requireFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.container, new LoginFragment())
-                                .commit();
+                        if (!isFromSplash) {
+                            Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            requireFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.container, new LoginFragment())
+                                    .commit();
+                        } else {
+                            Intent intentMain = new Intent(requireContext(), LoginActivity.class);
+                            intentMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intentMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intentMain);
+                            requireActivity().finish();
+                        }
                     }
 
                     @Override

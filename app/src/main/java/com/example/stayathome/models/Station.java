@@ -2,9 +2,10 @@ package com.example.stayathome.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Station {
+public class Station implements Serializable {
     @SerializedName("pinCodes")
     private List<Integer> pinCodes;
     @SerializedName("_id")
