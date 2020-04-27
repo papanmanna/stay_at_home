@@ -99,11 +99,10 @@ public class UserManager {
 
     public List<Station> getUserPoliceStations() {
         Gson gson = new Gson();
-        List<Station> stationsFromShared = new ArrayList<>();
+        List<Station> stationsFromShared;
         String jsonPreferences = sharedPreferences.getString(USER_POLICE_STATIONS, "");
 
-        Type type = new TypeToken<List<Station>>() {
-        }.getType();
+        Type type = new TypeToken<List<Station>>() {}.getType();
         stationsFromShared = gson.fromJson(jsonPreferences, type);
 
         return stationsFromShared;
