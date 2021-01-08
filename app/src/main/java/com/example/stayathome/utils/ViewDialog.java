@@ -1,4 +1,4 @@
-package com.example.stayathome.utils;
+package com.proassetz.utils;
 
 import android.app.Activity;
 import android.app.Dialog;
